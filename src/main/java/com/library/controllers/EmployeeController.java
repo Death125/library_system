@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.library.dto.EmployeeData;
-import com.library.dto.ResponseData;
+import com.library.dto.EmployeeRequest;
+import com.library.dto.ResponseRequest;
 import com.library.models.entities.Employee;
 import com.library.services.EmployeeService;
 
@@ -33,8 +33,9 @@ public class EmployeeController {
     private ModelMapper modelMapper;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseData<Employee>> create(@Valid @RequestBody EmployeeData employeeData, Errors errors) {
-        ResponseData<Employee> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseRequest<Employee>> create(@Valid @RequestBody EmployeeRequest employeeData,
+            Errors errors) {
+        ResponseRequest<Employee> responseData = new ResponseRequest<>();
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
@@ -53,8 +54,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseData<Employee>> update(@Valid @RequestBody EmployeeData employeeData, Errors errors) {
-        ResponseData<Employee> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseRequest<Employee>> update(@Valid @RequestBody EmployeeRequest employeeData,
+            Errors errors) {
+        ResponseRequest<Employee> responseData = new ResponseRequest<>();
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {

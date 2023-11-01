@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.library.models.entities.Employee;
-import com.library.models.repos.EmployeeRepo;
+import com.library.models.repositories.EmployeeRepo;
 
 import jakarta.transaction.Transactional;
 

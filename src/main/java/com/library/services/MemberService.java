@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.library.models.entities.Member;
-import com.library.models.repos.MemberRepo;
+import com.library.models.repositories.MemberRepo;
 
 import jakarta.transaction.Transactional;
 

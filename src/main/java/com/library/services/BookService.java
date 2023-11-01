@@ -3,20 +3,20 @@ package com.library.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.library.models.entities.Book;
 import com.library.models.entities.Member;
-import com.library.models.repos.BookRepo;
+import com.library.models.repositories.BookRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BookService {
-    @Autowired
-    private BookRepo bookRepo;
+    private final BookRepository bookRepo;
 
     public Book saveBook(Book book) {
         return bookRepo.save(book);

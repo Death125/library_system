@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.library.dto.MemberData;
-import com.library.dto.ResponseData;
+import com.library.dto.MemberRequest;
+import com.library.dto.ResponseRequest;
 import com.library.dto.SearchData;
 import com.library.models.entities.Member;
 import com.library.services.MemberService;
@@ -40,8 +40,8 @@ public class MemberController {
     private ModelMapper modelMapper;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseData<Member>> create(@Valid @RequestBody MemberData memberData, Errors errors) {
-        ResponseData<Member> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseRequest<Member>> create(@Valid @RequestBody MemberRequest memberData, Errors errors) {
+        ResponseRequest<Member> responseData = new ResponseRequest<>();
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
@@ -61,8 +61,8 @@ public class MemberController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseData<Member>> update(@Valid @RequestBody MemberData memberData, Errors errors) {
-        ResponseData<Member> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseRequest<Member>> update(@Valid @RequestBody MemberRequest memberData, Errors errors) {
+        ResponseRequest<Member> responseData = new ResponseRequest<>();
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
@@ -109,13 +109,13 @@ public class MemberController {
     }
 
     @PostMapping("/batch")
-    public ResponseEntity<ResponseData<Iterable<Member>>> createBatch(@RequestBody Member[] members) {
-        ResponseData<Iterable<Member>> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseRequest<Iterable<Member>>> createBatch(@RequestBody Member[] members) {
+        ResponseRequest<Iterable<Member>> responseData = new ResponseRequest<>();
 
         responseData.setPayload(memberService.saveBatch(Arrays.asList(members)));
 
         responseData.setStatus(true);
         return ResponseEntity.ok(responseData);
-    
+
     }
 }

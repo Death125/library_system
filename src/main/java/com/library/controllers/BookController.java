@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.library.dto.BookData;
-import com.library.dto.ResponseData;
+import com.library.dto.BookRequest;
+import com.library.dto.ResponseRequest;
 import com.library.dto.SearchData;
 import com.library.models.entities.Book;
 import com.library.models.entities.Member;
@@ -37,8 +37,8 @@ public class BookController {
     private ModelMapper modelMapper;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseData<Book>> create(@Valid @RequestBody BookData bookData, Errors errors) {
-        ResponseData<Book> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseRequest<Book>> create(@Valid @RequestBody BookRequest bookData, Errors errors) {
+        ResponseRequest<Book> responseData = new ResponseRequest<>();
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
@@ -57,8 +57,8 @@ public class BookController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseData<Book>> update(@Valid @RequestBody BookData bookData, Errors errors) {
-        ResponseData<Book> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseRequest<Book>> update(@Valid @RequestBody BookRequest bookData, Errors errors) {
+        ResponseRequest<Book> responseData = new ResponseRequest<>();
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
