@@ -20,6 +20,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
+@Builder
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Book {
 
@@ -40,13 +42,13 @@ public class Book {
     private String bookName;
 
     @Column(name = "book_description", length = 500)
-    private String book_description;
-
-    @Column(name = "book_amount", length = 11)
-    private Integer book_amount;
+    private String bookDescription;
 
     @Column(name = "book_price", length = 11)
     private Integer bookPrice;
+
+    @Column(name = "book_amount", length = 11)
+    private Integer bookAmount;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

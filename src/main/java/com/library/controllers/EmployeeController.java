@@ -1,6 +1,5 @@
 package com.library.controllers;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.library.dto.EmployeeRequest;
-import com.library.dto.ResponseRequest;
+
 import com.library.models.entities.Employee;
 import com.library.services.EmployeeService;
 
@@ -29,50 +28,49 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    // @PostMapping("/create")
+    // public ResponseEntity<ResponseRequest<Employee>> create(@Valid @RequestBody
+    // EmployeeRequest employeeData,
+    // Errors errors) {
+    // ResponseRequest<Employee> responseData = new ResponseRequest<>();
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseRequest<Employee>> create(@Valid @RequestBody EmployeeRequest employeeData,
-            Errors errors) {
-        ResponseRequest<Employee> responseData = new ResponseRequest<>();
+    // if (errors.hasErrors()) {
+    // for (ObjectError error : errors.getAllErrors()) {
+    // responseData.getMessages().add(error.getDefaultMessage());
 
-        if (errors.hasErrors()) {
-            for (ObjectError error : errors.getAllErrors()) {
-                responseData.getMessages().add(error.getDefaultMessage());
+    // responseData.setStatus(false);
+    // responseData.setPayload(null);
+    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+    // }
+    // }
+    // Employee employee = modelMapper.map(employeeData, Employee.class);
 
-                responseData.setStatus(false);
-                responseData.setPayload(null);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-            }
-        }
-        Employee employee = modelMapper.map(employeeData, Employee.class);
+    // responseData.setStatus(true);
+    // responseData.setPayload(employeeService.saveEmployee(employee));
+    // return ResponseEntity.ok(responseData);
+    // }
 
-        responseData.setStatus(true);
-        responseData.setPayload(employeeService.saveEmployee(employee));
-        return ResponseEntity.ok(responseData);
-    }
+    // @PutMapping("/update")
+    // public ResponseEntity<ResponseRequest<Employee>> update(@Valid @RequestBody
+    // EmployeeRequest employeeData,
+    // Errors errors) {
+    // ResponseRequest<Employee> responseData = new ResponseRequest<>();
 
-    @PutMapping("/update")
-    public ResponseEntity<ResponseRequest<Employee>> update(@Valid @RequestBody EmployeeRequest employeeData,
-            Errors errors) {
-        ResponseRequest<Employee> responseData = new ResponseRequest<>();
+    // if (errors.hasErrors()) {
+    // for (ObjectError error : errors.getAllErrors()) {
+    // responseData.getMessages().add(error.getDefaultMessage());
 
-        if (errors.hasErrors()) {
-            for (ObjectError error : errors.getAllErrors()) {
-                responseData.getMessages().add(error.getDefaultMessage());
+    // responseData.setStatus(false);
+    // responseData.setPayload(null);
+    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+    // }
+    // }
+    // Employee employee = modelMapper.map(employeeData, Employee.class);
 
-                responseData.setStatus(false);
-                responseData.setPayload(null);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-            }
-        }
-        Employee employee = modelMapper.map(employeeData, Employee.class);
-
-        responseData.setStatus(true);
-        responseData.setPayload(employeeService.updateEmployee(employee));
-        return ResponseEntity.ok(responseData);
-    }
+    // responseData.setStatus(true);
+    // responseData.setPayload(employeeService.updateEmployee(employee));
+    // return ResponseEntity.ok(responseData);
+    // }
 
     @GetMapping("/findAllEmployee")
     public Iterable<Employee> findAllEmployee() {

@@ -1,13 +1,10 @@
 package com.library.controllers;
 
 import java.util.List;
-import org.modelmapper.ModelMapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,62 +15,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.library.dto.BookRequest;
-import com.library.dto.ResponseRequest;
+
 import com.library.dto.SearchData;
+import com.library.exceptions.BookNotFoundException;
 import com.library.models.entities.Book;
-import com.library.models.entities.Member;
+
 import com.library.services.BookService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/books")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private final BookService bookService;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseRequest<Book>> create(@Valid @RequestBody BookRequest bookData, Errors errors) {
-        ResponseRequest<Book> responseData = new ResponseRequest<>();
+    public ResponseEntity<Book> createBook(@Valid @RequestBody BookRequest bookRequest) {
+        return new ResponseEntity<Book>(bookService.createBook(bookRequest), HttpStatus.CREATED);
 
-        if (errors.hasErrors()) {
-            for (ObjectError error : errors.getAllErrors()) {
-                responseData.getMessages().add(error.getDefaultMessage());
-            }
-
-            responseData.setStatus(false);
-            responseData.setPayload(null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-        }
-        Book book = modelMapper.map(bookData, Book.class);
-
-        responseData.setStatus(true);
-        responseData.setPayload(bookService.saveBook(book));
-        return ResponseEntity.ok(responseData);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseRequest<Book>> update(@Valid @RequestBody BookRequest bookData, Errors errors) {
-        ResponseRequest<Book> responseData = new ResponseRequest<>();
+    public ResponseEntity<Book> updateBook(@Valid @RequestBody BookRequest bookRequest) throws BookNotFoundException {
+        return new ResponseEntity<Book>(bookService.updateBook(bookRequest), HttpStatus.CREATED);
 
-        if (errors.hasErrors()) {
-            for (ObjectError error : errors.getAllErrors()) {
-                responseData.getMessages().add(error.getDefaultMessage());
-            }
-
-            responseData.setStatus(false);
-            responseData.setPayload(null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-        }
-        Book book = modelMapper.map(bookData, Book.class);
-
-        responseData.setStatus(true);
-        responseData.setPayload(bookService.updateBook(book));
-        return ResponseEntity.ok(responseData);
     }
 
     @GetMapping("/findAllBook")
@@ -91,10 +59,11 @@ public class BookController {
         bookService.removeBookById(id);
     }
 
-    @PostMapping("/addMember/{id}")
-    public void addMember(@RequestBody Member member, @PathVariable("id") Long bookId) {
-        bookService.addMember(member, bookId);
-    }
+    // @PostMapping("/addMember/{id}")
+    // public void addMember(@RequestBody Member member, @PathVariable("id") Long
+    // bookId) {
+    // bookService.addMember(member, bookId);
+    // }
 
     // URL to search book
     @PostMapping("/search/bookName")
