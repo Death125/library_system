@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.library.dto.MemberRequest;
 import com.library.exceptions.MemberNotFoundException;
 import com.library.models.entities.Member;
-import com.library.models.repositories.MemberRepo;
+import com.library.models.repositories.MemberRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -18,7 +18,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class MemberService {
     @Autowired
-    private MemberRepo memberRepo;
+    private MemberRepository memberRepo;
 
     public Member createMember(MemberRequest memberRequest) {
         Member member = Member.builder().memberName(memberRequest.getMemberName())
@@ -31,7 +31,7 @@ public class MemberService {
         Optional<Member> member = memberRepo.findById(memberRequest.getId());
 
         if (!member.isPresent()) {
-            throw new MemberNotFoundException("Member with id " + member + " not found");
+            throw new MemberNotFoundException("Member with id " + memberRequest.getId() + " not found");
         } else {
             member.get().setMemberName(memberRequest.getMemberName());
             member.get().setDateUpdated(memberRequest.getDateUpdated());
@@ -45,29 +45,30 @@ public class MemberService {
         return null;
     }
 
-    public Iterable<Member> findAllMember() throws MemberNotFoundException {
-        Iterable<Member> members = memberRepo.findAll();
-        if (members == null) {
+    public List<Member> findAllMember() throws MemberNotFoundException {
+        List<Member> members = memberRepo.findAll();
+        if (members.size() <= 0) {
             throw new MemberNotFoundException("No one member in here !! ");
         } else {
             return members;
         }
     }
 
-    public Member findOneMember(Long id) {
+    public Member findOneMember(Long id) throws MemberNotFoundException {
         Optional<Member> member = memberRepo.findById(id);
 
-        if (!member.isPresent()) {
-            return null;
+        if (member.isPresent()) {
+            return member.get();
+        } else {
+            throw new MemberNotFoundException("Member with id " + id + " not found");
         }
-        return member.get();
     }
 
     public void deleteMemberById(Long id) throws MemberNotFoundException {
         Optional<Member> member = memberRepo.findById(id);
 
         if (!member.isPresent()) {
-            throw new MemberNotFoundException("Member with id " + member + " not found");
+            throw new MemberNotFoundException("Member with id " + member.get().getId() + " not found");
         } else {
             memberRepo.deleteById(id);
         }

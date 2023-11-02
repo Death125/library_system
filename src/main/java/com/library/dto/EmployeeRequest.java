@@ -19,7 +19,7 @@ public class EmployeeRequest {
 
     @NotEmpty(message = "Name cannot be empty")
     @NotNull
-    private String employee_name;
+    private String employeeName;
 
     private LocalDateTime dateCreated;
 

@@ -1,7 +1,5 @@
 package com.library.controllers;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.PageRequest;
@@ -9,8 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +27,7 @@ import com.library.services.MemberService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping("/api/v1/members")
 public class MemberController {
 
     @Autowired
@@ -49,18 +46,19 @@ public class MemberController {
     }
 
     @GetMapping("/findAllMember")
-    public Iterable<Member> findAllMember() throws MemberNotFoundException {
-        return memberService.findAllMember();
+    public ResponseEntity<Iterable<Member>> findAllMember() throws MemberNotFoundException {
+        return ResponseEntity.ok(memberService.findAllMember());
     }
 
     @GetMapping("/findOneMember/{id}")
-    public Member findOneMember(@PathVariable("id") Long id) {
-        return memberService.findOneMember(id);
+    public ResponseEntity<Member> findOneMember(@PathVariable("id") Long id) throws MemberNotFoundException {
+        return ResponseEntity.ok(memberService.findOneMember(id));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteEmployeeById(@PathVariable("id") Long id) throws MemberNotFoundException {
+    public ResponseEntity<Void> deleteEmployeeById(@PathVariable("id") Long id) throws MemberNotFoundException {
         memberService.deleteMemberById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/search/{size}/{page}/{sort}")

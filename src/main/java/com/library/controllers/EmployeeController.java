@@ -3,10 +3,10 @@ package com.library.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.library.dto.EmployeeRequest;
+import com.library.exceptions.BookNotFoundException;
 import com.library.exceptions.EmployeeNotFoundException;
 import com.library.models.entities.Employee;
 import com.library.services.EmployeeService;
@@ -22,7 +23,7 @@ import com.library.services.EmployeeService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/api/v1/employees")
 public class EmployeeController {
 
     @Autowired
@@ -36,21 +37,28 @@ public class EmployeeController {
     @PutMapping("/update")
     public ResponseEntity<Employee> updateEmployee(@Valid @RequestBody EmployeeRequest employeeRequest)
             throws EmployeeNotFoundException {
-        return ResponseEntity.ok(employeeService.updateEmployee(employeeRequest));
+        return new ResponseEntity<Employee>(employeeService.updateEmployee(employeeRequest), HttpStatus.CREATED);
     }
 
     @GetMapping("/findAllEmployee")
-    public Iterable<Employee> findAllEmployee() throws EmployeeNotFoundException {
-        return employeeService.findAllEmployee();
+    public ResponseEntity<Iterable<Employee>> findAllEmployee() throws EmployeeNotFoundException {
+        return ResponseEntity.ok(employeeService.findAllEmployee());
     }
 
     @GetMapping("/findOneEmployee/{id}")
-    public Employee findOneEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
-        return employeeService.findOneEmployee(id);
+    public ResponseEntity<Employee> findOneEmployee(@PathVariable("id") Long id) throws EmployeeNotFoundException {
+        return ResponseEntity.ok(employeeService.findOneEmployee(id));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
+    public ResponseEntity<Void> deleteEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
         employeeService.deleteEmployeeById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PatchMapping("/{employeeId}/addBook/{bookId}")
+    public ResponseEntity<Employee> addBook(@PathVariable("employeeId") Long employeeId, @PathVariable Long bookId)
+            throws EmployeeNotFoundException, BookNotFoundException {
+        return ResponseEntity.ok(employeeService.addBook(employeeId, bookId));
     }
 }

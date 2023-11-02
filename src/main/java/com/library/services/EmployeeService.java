@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.library.dto.EmployeeRequest;
+import com.library.exceptions.BookNotFoundException;
 import com.library.exceptions.EmployeeNotFoundException;
+import com.library.models.entities.Book;
 import com.library.models.entities.Employee;
-import com.library.models.repositories.EmployeeRepo;
+import com.library.models.repositories.BookRepository;
+import com.library.models.repositories.EmployeeRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -17,10 +20,13 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class EmployeeService {
     @Autowired
-    private EmployeeRepo employeeRepo;
+    private EmployeeRepository employeeRepo;
+
+    @Autowired
+    private BookRepository bookRepo;
 
     public Employee createEmployee(EmployeeRequest employeeRequest) {
-        Employee employee = Employee.builder().employee_name(employeeRequest.getEmployee_name())
+        Employee employee = Employee.builder().employeeName(employeeRequest.getEmployeeName())
                 .dateCreated(employeeRequest.getDateCreated()).dateUpdated(employeeRequest.getDateUpdated()).build();
 
         return employeeRepo.save(employee);
@@ -30,12 +36,12 @@ public class EmployeeService {
         Optional<Employee> employee = employeeRepo.findById(employeeRequest.getId());
 
         if (employee.isPresent()) {
-            employee.get().setEmployee_name(employeeRequest.getEmployee_name());
+            employee.get().setEmployeeName(employeeRequest.getEmployeeName());
             employee.get().setDateUpdated(employeeRequest.getDateUpdated());
 
             return employeeRepo.save(employee.get());
         } else {
-            throw new EmployeeNotFoundException("Employee with id " + employee + " not found");
+            throw new EmployeeNotFoundException("Employee with id " + employeeRequest.getId() + " not found");
         }
 
     }
@@ -43,7 +49,7 @@ public class EmployeeService {
     public Iterable<Employee> findAllEmployee() throws EmployeeNotFoundException {
         List<Employee> employee = employeeRepo.findAll();
 
-        if (employee == null) {
+        if (employee.size() <= 0) {
             throw new EmployeeNotFoundException("No one employee !!");
         } else {
             return employee;
@@ -53,19 +59,34 @@ public class EmployeeService {
     public Employee findOneEmployee(Long id) throws EmployeeNotFoundException {
         Optional<Employee> employee = employeeRepo.findById(id);
 
-        if (!employee.isPresent()) {
-            throw new EmployeeNotFoundException("Employee with id " + employee + " not found");
+        if (employee.isPresent()) {
+            return employee.get();
         }
-        return employee.get();
+        throw new EmployeeNotFoundException("Employee with id " + id + " not found");
     }
 
     public void deleteEmployeeById(Long id) throws EmployeeNotFoundException {
         Optional<Employee> employee = employeeRepo.findById(id);
 
         if (!employee.isPresent()) {
-            throw new EmployeeNotFoundException("Employee with id " + employee + " not found");
+            throw new EmployeeNotFoundException("Employee with id " + employee.get().getId() + " not found");
         } else {
             employeeRepo.deleteById(id);
         }
+    }
+
+    public Employee addBook(Long employeeId, Long bookId) throws EmployeeNotFoundException, BookNotFoundException {
+        Employee employee = employeeRepo.findById(employeeId).get();
+        Book book = bookRepo.findById(bookId).get();
+
+        if (employee == null) {
+            throw new EmployeeNotFoundException("Employee with id " + employeeId + " not found");
+        } else if (book == null) {
+            throw new BookNotFoundException("Book with id " + bookId + " not found");
+        } else {
+            employee.addBook(book);
+            return employeeRepo.save(employee);
+        }
+
     }
 }

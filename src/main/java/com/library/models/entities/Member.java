@@ -2,19 +2,22 @@ package com.library.models.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -30,8 +33,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @Table(name = "members")
-// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-// property = "id")
 public class Member implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -50,9 +51,12 @@ public class Member implements Serializable {
     @UpdateTimestamp
     private LocalDateTime dateUpdated;
 
-    // @ManyToMany(mappedBy = "members")
-    // public Set<Book> books;
+    @JsonIgnoreProperties("members")
+    @ManyToMany
+    @JoinTable(name = "tbl_member_book", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
+    public List<Book> books;
 
-    // @ManyToOne
-    // public Employee employee;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    public Employee employee;
 }

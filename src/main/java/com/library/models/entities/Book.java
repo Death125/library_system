@@ -1,13 +1,13 @@
 package com.library.models.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,13 +58,11 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime dateUpdated;
 
-    // @ManyToMany
-    // @JoinTable(name = "tbl_book_member", joinColumns = @JoinColumn(name =
-    // "book_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
-    // private Set<Member> members;
+    @JsonIgnoreProperties("books")
+    @ManyToMany(mappedBy = "books")
+    private List<Member> members;
 
-    // @ManyToMany
-    // @JoinTable(name = "tbl_book_employee", joinColumns = @JoinColumn(name =
-    // "book_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
-    // private Set<Employee> employees;
+    @JsonIgnoreProperties("books")
+    @ManyToMany(mappedBy = "books")
+    private List<Employee> employees;
 }

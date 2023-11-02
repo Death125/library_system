@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.library.dto.BookRequest;
 import com.library.exceptions.BookNotFoundException;
-import com.library.kafka.KafkaProducer;
+// import com.library.kafka.KafkaProducer;
 import com.library.models.entities.Book;
 import com.library.models.entities.Member;
 import com.library.models.repositories.BookRepository;
@@ -20,11 +20,11 @@ import jakarta.transaction.Transactional;
 public class BookService {
     @Autowired
     private BookRepository bookRepo;
-    private KafkaProducer kafkaProducer;
+    // private KafkaProducer kafkaProducer;
 
-    public BookService(KafkaProducer kafkaProducer) {
-        this.kafkaProducer = kafkaProducer;
-    }
+    // public BookService(KafkaProducer kafkaProducer) {
+    // this.kafkaProducer = kafkaProducer;
+    // }
 
     public Book createBook(BookRequest bookRequest) {
         Book book = Book.builder().bookName(bookRequest.getBookName()).bookDescription(bookRequest.getBookDescription())
@@ -49,10 +49,10 @@ public class BookService {
         }
     }
 
-    public String publish(String message) {
-        kafkaProducer.sendMessage(message);
-        return "Message sent to the topic";
-    }
+    // public String publish(String message) {
+    // kafkaProducer.sendMessage(message);
+    // return "Message sent to the topic";
+    // }
 
     public Iterable<Book> findAllBook() throws BookNotFoundException {
         List<Book> books = bookRepo.findAll();
@@ -67,17 +67,17 @@ public class BookService {
     public Book findOneBook(Long id) throws BookNotFoundException {
         Optional<Book> book = bookRepo.findById(id);
 
-        if (!book.isPresent()) {
-            throw new BookNotFoundException("Book with id " + book + " not found");
-        }
-        return book.get();
+        if (book.isPresent())
+            return book.get();
+        else
+            throw new BookNotFoundException("Book with id " + id + " not found");
     }
 
     public void removeBookById(Long id) throws BookNotFoundException {
         Optional<Book> book = bookRepo.findById(id);
 
         if (!book.isPresent()) {
-            throw new BookNotFoundException("Book with id " + book + " not found");
+            throw new BookNotFoundException("Book with id " + book.get().getId() + " not found");
         } else {
             bookRepo.deleteById(id);
         }

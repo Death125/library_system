@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/books")
+@RequestMapping("/api/v1/books")
 public class BookController {
 
     private final BookService bookService;
@@ -51,18 +51,19 @@ public class BookController {
     }
 
     @GetMapping("/findAllBook")
-    public Iterable<Book> findAllBook() throws BookNotFoundException {
-        return bookService.findAllBook();
+    public ResponseEntity<Iterable<Book>> findAllBook() throws BookNotFoundException {
+        return ResponseEntity.ok(bookService.findAllBook());
     }
 
     @GetMapping("/findOneBook/{id}")
-    public Book findOneBook(@PathVariable("id") Long id) throws BookNotFoundException {
-        return bookService.findOneBook(id);
+    public ResponseEntity<Book> findOneBook(@PathVariable("id") Long id) throws BookNotFoundException {
+        return ResponseEntity.ok(bookService.findOneBook(id));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void removeBookById(@PathVariable("id") Long id) throws BookNotFoundException {
+    public ResponseEntity<Void> removeBookById(@PathVariable("id") Long id) throws BookNotFoundException {
         bookService.removeBookById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // @PostMapping("/addMember/{id}")
