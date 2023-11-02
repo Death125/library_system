@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.library.dto.EmployeeRequest;
-
+import com.library.exceptions.EmployeeNotFoundException;
 import com.library.models.entities.Employee;
 import com.library.services.EmployeeService;
 
@@ -28,62 +28,29 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    // @PostMapping("/create")
-    // public ResponseEntity<ResponseRequest<Employee>> create(@Valid @RequestBody
-    // EmployeeRequest employeeData,
-    // Errors errors) {
-    // ResponseRequest<Employee> responseData = new ResponseRequest<>();
+    @PostMapping("/create")
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
+        return new ResponseEntity<Employee>(employeeService.createEmployee(employeeRequest), HttpStatus.CREATED);
+    }
 
-    // if (errors.hasErrors()) {
-    // for (ObjectError error : errors.getAllErrors()) {
-    // responseData.getMessages().add(error.getDefaultMessage());
-
-    // responseData.setStatus(false);
-    // responseData.setPayload(null);
-    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-    // }
-    // }
-    // Employee employee = modelMapper.map(employeeData, Employee.class);
-
-    // responseData.setStatus(true);
-    // responseData.setPayload(employeeService.saveEmployee(employee));
-    // return ResponseEntity.ok(responseData);
-    // }
-
-    // @PutMapping("/update")
-    // public ResponseEntity<ResponseRequest<Employee>> update(@Valid @RequestBody
-    // EmployeeRequest employeeData,
-    // Errors errors) {
-    // ResponseRequest<Employee> responseData = new ResponseRequest<>();
-
-    // if (errors.hasErrors()) {
-    // for (ObjectError error : errors.getAllErrors()) {
-    // responseData.getMessages().add(error.getDefaultMessage());
-
-    // responseData.setStatus(false);
-    // responseData.setPayload(null);
-    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-    // }
-    // }
-    // Employee employee = modelMapper.map(employeeData, Employee.class);
-
-    // responseData.setStatus(true);
-    // responseData.setPayload(employeeService.updateEmployee(employee));
-    // return ResponseEntity.ok(responseData);
-    // }
+    @PutMapping("/update")
+    public ResponseEntity<Employee> updateEmployee(@Valid @RequestBody EmployeeRequest employeeRequest)
+            throws EmployeeNotFoundException {
+        return ResponseEntity.ok(employeeService.updateEmployee(employeeRequest));
+    }
 
     @GetMapping("/findAllEmployee")
-    public Iterable<Employee> findAllEmployee() {
+    public Iterable<Employee> findAllEmployee() throws EmployeeNotFoundException {
         return employeeService.findAllEmployee();
     }
 
-    @GetMapping("/{id}")
-    public Employee findOneEmployeeById(@PathVariable("id") Long id) {
+    @GetMapping("/findOneEmployee/{id}")
+    public Employee findOneEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
         return employeeService.findOneEmployee(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteEmployeeById(@PathVariable("id") Long id) {
+    public void deleteEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
         employeeService.deleteEmployeeById(id);
     }
 }

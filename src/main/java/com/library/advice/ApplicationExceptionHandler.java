@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.library.exceptions.BookNotFoundException;
+import com.library.exceptions.EmployeeNotFoundException;
+import com.library.exceptions.MemberNotFoundException;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
@@ -24,9 +26,25 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(BookNotFoundException.class)
     private Map<String, String> bookNotFoundException(BookNotFoundException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("Error Message : ", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    private Map<String, String> employeeNotFoundException(EmployeeNotFoundException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("Error Message : ", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MemberNotFoundException.class)
+    private Map<String, String> memberNotFoundException(MemberNotFoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("Error Message : ", ex.getMessage());
         return errorMap;

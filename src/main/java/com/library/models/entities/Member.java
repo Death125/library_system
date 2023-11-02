@@ -20,6 +20,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,8 +28,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "members")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
 public class Member implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -47,9 +50,9 @@ public class Member implements Serializable {
     @UpdateTimestamp
     private LocalDateTime dateUpdated;
 
-    @ManyToMany(mappedBy = "members")
-    public Set<Book> books;
+    // @ManyToMany(mappedBy = "members")
+    // public Set<Book> books;
 
-    @ManyToOne
-    public Employee employee;
+    // @ManyToOne
+    // public Employee employee;
 }

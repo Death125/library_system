@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "employees")
 public class Employee {
     @Id
@@ -39,6 +41,6 @@ public class Employee {
     @UpdateTimestamp
     private LocalDateTime dateUpdated;
 
-    @ManyToMany(mappedBy = "employees")
-    public Set<Book> books;
+    // @ManyToMany(mappedBy = "employees")
+    // public Set<Book> books;
 }

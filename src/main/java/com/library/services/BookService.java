@@ -3,22 +3,28 @@ package com.library.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.library.dto.BookRequest;
 import com.library.exceptions.BookNotFoundException;
+import com.library.kafka.KafkaProducer;
 import com.library.models.entities.Book;
 import com.library.models.entities.Member;
 import com.library.models.repositories.BookRepository;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class BookService {
-    private final BookRepository bookRepo;
+    @Autowired
+    private BookRepository bookRepo;
+    private KafkaProducer kafkaProducer;
+
+    public BookService(KafkaProducer kafkaProducer) {
+        this.kafkaProducer = kafkaProducer;
+    }
 
     public Book createBook(BookRequest bookRequest) {
         Book book = Book.builder().bookName(bookRequest.getBookName()).bookDescription(bookRequest.getBookDescription())
@@ -39,25 +45,42 @@ public class BookService {
 
             return bookRepo.save(book.get());
         } else {
-            throw new BookNotFoundException("Book With ID : " + bookRequest.getId() + " Not Found");
+            throw new BookNotFoundException("Book With ID " + bookRequest.getId() + " Not Found");
         }
     }
 
-    public Iterable<Book> findAllBook() {
-        return bookRepo.findAll();
+    public String publish(String message) {
+        kafkaProducer.sendMessage(message);
+        return "Message sent to the topic";
     }
 
-    public Book findOneBook(Long id) {
+    public Iterable<Book> findAllBook() throws BookNotFoundException {
+        List<Book> books = bookRepo.findAll();
+
+        if (books.size() <= 0) {
+            throw new BookNotFoundException("No one book in here !!");
+        } else {
+            return books;
+        }
+    }
+
+    public Book findOneBook(Long id) throws BookNotFoundException {
         Optional<Book> book = bookRepo.findById(id);
 
         if (!book.isPresent()) {
-            return null;
+            throw new BookNotFoundException("Book with id " + book + " not found");
         }
         return book.get();
     }
 
-    public void removeBookById(Long id) {
-        bookRepo.deleteById(id);
+    public void removeBookById(Long id) throws BookNotFoundException {
+        Optional<Book> book = bookRepo.findById(id);
+
+        if (!book.isPresent()) {
+            throw new BookNotFoundException("Book with id " + book + " not found");
+        } else {
+            bookRepo.deleteById(id);
+        }
     }
 
     // public void addMember(Member member, Long bookId) {

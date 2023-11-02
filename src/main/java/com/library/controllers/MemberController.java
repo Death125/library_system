@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.library.dto.MemberRequest;
 
 import com.library.dto.SearchData;
+import com.library.exceptions.MemberNotFoundException;
 import com.library.models.entities.Member;
 import com.library.services.MemberService;
 
@@ -35,62 +36,30 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    // @PostMapping("/create")
-    // public ResponseEntity<ResponseRequest<Member>> create(@Valid @RequestBody
-    // MemberRequest memberData, Errors errors) {
-    // ResponseRequest<Member> responseData = new ResponseRequest<>();
+    @PostMapping("/create")
+    public ResponseEntity<Member> createMember(@Valid @RequestBody MemberRequest memberRequest) {
+        return new ResponseEntity<Member>(memberService.createMember(memberRequest), HttpStatus.CREATED);
+    }
 
-    // if (errors.hasErrors()) {
-    // for (ObjectError error : errors.getAllErrors()) {
-    // responseData.getMessages().add(error.getDefaultMessage());
+    @PutMapping("/update")
+    public ResponseEntity<Member> updateMember(@Valid @RequestBody MemberRequest memberRequest)
+            throws MemberNotFoundException {
+        return ResponseEntity.ok(memberService.updateMember(memberRequest));
 
-    // responseData.setStatus(false);
-    // responseData.setPayload(null);
-    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-    // }
-    // }
-
-    // Member member = modelMapper.map(memberData, Member.class);
-
-    // responseData.setStatus(true);
-    // responseData.setPayload(memberService.saveMember(member));
-    // return ResponseEntity.ok(responseData);
-    // }
-
-    // @PutMapping("/update")
-    // public ResponseEntity<ResponseRequest<Member>> update(@Valid @RequestBody
-    // MemberRequest memberData, Errors errors) {
-    // ResponseRequest<Member> responseData = new ResponseRequest<>();
-
-    // if (errors.hasErrors()) {
-    // for (ObjectError error : errors.getAllErrors()) {
-    // responseData.getMessages().add(error.getDefaultMessage());
-
-    // responseData.setStatus(false);
-    // responseData.setPayload(null);
-    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-    // }
-    // }
-
-    // Member member = modelMapper.map(memberData, Member.class);
-
-    // responseData.setStatus(true);
-    // responseData.setPayload(memberService.updateMember(member));
-    // return ResponseEntity.ok(responseData);
-    // }
+    }
 
     @GetMapping("/findAllMember")
-    public Iterable<Member> findAllMember() {
+    public Iterable<Member> findAllMember() throws MemberNotFoundException {
         return memberService.findAllMember();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/findOneMember/{id}")
     public Member findOneMember(@PathVariable("id") Long id) {
         return memberService.findOneMember(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteEmployeeById(@PathVariable("id") Long id) {
+    public void deleteEmployeeById(@PathVariable("id") Long id) throws MemberNotFoundException {
         memberService.deleteMemberById(id);
     }
 

@@ -25,11 +25,11 @@ public class BookRequest {
     @NotNull
     private String bookDescription;
 
-    @Min(value = 1, message = "Price >= 1")
+    @Min(value = 0, message = "Price >= 1")
     @NotNull(message = "Price cannot be null")
     private Integer bookPrice;
 
-    @Min(value = 1, message = "Amount >= 1")
+    @Min(value = 0, message = "Amount >= 1")
     @NotNull(message = "Amount cannot be null")
     private Integer bookAmount;
 

@@ -30,7 +30,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "books")
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
 public class Book {
 
     @Id
@@ -57,11 +58,13 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime dateUpdated;
 
-    @ManyToMany
-    @JoinTable(name = "tbl_book_member", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
-    private Set<Member> members;
+    // @ManyToMany
+    // @JoinTable(name = "tbl_book_member", joinColumns = @JoinColumn(name =
+    // "book_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
+    // private Set<Member> members;
 
-    @ManyToMany
-    @JoinTable(name = "tbl_book_employee", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
-    private Set<Employee> employees;
+    // @ManyToMany
+    // @JoinTable(name = "tbl_book_employee", joinColumns = @JoinColumn(name =
+    // "book_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    // private Set<Employee> employees;
 }

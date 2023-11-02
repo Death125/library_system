@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.library.dto.BookRequest;
@@ -44,18 +45,23 @@ public class BookController {
 
     }
 
+    @GetMapping("/publish")
+    public ResponseEntity<String> publish(@RequestParam("message") String message) {
+        return ResponseEntity.ok("Message sent to the topic");
+    }
+
     @GetMapping("/findAllBook")
-    public Iterable<Book> findAllBook() {
+    public Iterable<Book> findAllBook() throws BookNotFoundException {
         return bookService.findAllBook();
     }
 
-    @GetMapping("/{id}")
-    public Book findOneBook(@PathVariable("id") Long id) {
+    @GetMapping("/findOneBook/{id}")
+    public Book findOneBook(@PathVariable("id") Long id) throws BookNotFoundException {
         return bookService.findOneBook(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void removeBookById(@PathVariable("id") Long id) {
+    public void removeBookById(@PathVariable("id") Long id) throws BookNotFoundException {
         bookService.removeBookById(id);
     }
 
