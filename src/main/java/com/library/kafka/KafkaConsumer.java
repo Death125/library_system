@@ -5,13 +5,16 @@
 // import org.springframework.kafka.annotation.KafkaListener;
 // import org.springframework.stereotype.Service;
 
+// import com.library.models.entities.Employee;
+
 // @Service
 // public class KafkaConsumer {
 // private static final Logger LOGGER =
 // LoggerFactory.getLogger(KafkaConsumer.class);
 
-// @KafkaListener(topics = "KafkaTopicExample", groupId = "myGroup")
-// public void consume(String message) {
-// LOGGER.info(String.format("Message received -> %s", message));
+// @KafkaListener(topics = "object-saved", groupId = "myGroup")
+// public void consume(Employee employee) {
+// LOGGER.info(String.format("Message received -> %s", employee.toString()));
+
 // }
 // }

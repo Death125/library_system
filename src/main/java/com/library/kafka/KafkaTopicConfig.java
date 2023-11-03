@@ -10,6 +10,12 @@
 // @Bean
 // public NewTopic kafkaTopicExample() {
 // // Nama topik disini tidak boleh pake spasi atau akan terjadi error
-// return TopicBuilder.name("KafkaTopicExample").build();
+// return TopicBuilder.name("topic-example").build();
 // }
+
+// @Bean
+// public NewTopic kafkaJsonTopicExample() {
+// return TopicBuilder.name("object-saved").build();
+// }
+
 // }

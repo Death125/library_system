@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class EmployeeRequest {
-
     private Long id;
 
     @NotEmpty(message = "Name cannot be empty")

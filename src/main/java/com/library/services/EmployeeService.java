@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.library.dto.EmployeeRequest;
 import com.library.exceptions.BookNotFoundException;
 import com.library.exceptions.EmployeeNotFoundException;
+// import com.library.kafka.KafkaProducer;
 import com.library.models.entities.Book;
 import com.library.models.entities.Employee;
 import com.library.models.repositories.BookRepository;
@@ -25,10 +26,18 @@ public class EmployeeService {
     @Autowired
     private BookRepository bookRepo;
 
+    // @Autowired
+    // private KafkaProducer kafkaProducer;
+
     public Employee createEmployee(EmployeeRequest employeeRequest) {
         Employee employee = Employee.builder().employeeName(employeeRequest.getEmployeeName())
                 .dateCreated(employeeRequest.getDateCreated()).dateUpdated(employeeRequest.getDateUpdated()).build();
 
+        // publish(employee);
+        System.out.println(employeeRequest.getId());
+        System.out.println(employeeRequest.getEmployeeName());
+        System.out.println(employeeRequest.getDateCreated());
+        System.out.println(employeeRequest.getDateUpdated());
         return employeeRepo.save(employee);
     }
 
@@ -87,6 +96,14 @@ public class EmployeeService {
             employee.addBook(book);
             return employeeRepo.save(employee);
         }
+    }
 
+    // public String publish(Employee employee) {
+    // kafkaProducer.sendMessage(employee);
+    // return "Json message sent to kafka topic";
+    // }
+
+    public String tes(EmployeeRequest employeeRequest) {
+        return employeeRequest.toString();
     }
 }

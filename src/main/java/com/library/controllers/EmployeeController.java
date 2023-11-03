@@ -1,5 +1,7 @@
 package com.library.controllers;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,5 +62,11 @@ public class EmployeeController {
     public ResponseEntity<Employee> addBook(@PathVariable("employeeId") Long employeeId, @PathVariable Long bookId)
             throws EmployeeNotFoundException, BookNotFoundException {
         return ResponseEntity.ok(employeeService.addBook(employeeId, bookId));
+    }
+
+    @GetMapping("/ts")
+    public String ts() {
+        EmployeeRequest employeeRequest = new EmployeeRequest(2L, "bubu", LocalDateTime.now(), LocalDateTime.now());
+        return employeeService.tes(employeeRequest);
     }
 }

@@ -10,7 +10,6 @@ import com.library.dto.BookRequest;
 import com.library.exceptions.BookNotFoundException;
 // import com.library.kafka.KafkaProducer;
 import com.library.models.entities.Book;
-import com.library.models.entities.Member;
 import com.library.models.repositories.BookRepository;
 
 import jakarta.transaction.Transactional;
